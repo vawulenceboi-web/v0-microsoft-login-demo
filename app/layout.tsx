@@ -1,10 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Source_Sans_3 as Segoe_UI } from "next/font/google"
+import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
-const _segoeUI = Segoe_UI({ subsets: ["latin"], weight: ["400", "600", "700"] })
+const inter = Inter({ subsets: ["latin"], display: "swap" })
 
 export const metadata: Metadata = {
   title: "Microsoft Login",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
+      <body className={`${inter.className} font-sans antialiased`}>
         {children}
         <Analytics />
       </body>

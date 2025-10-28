@@ -17,7 +17,10 @@ module.exports = {
       colors: {
         border: "var(--border)",
         input: "var(--input)",
-        ring: "var(--ring)",
+        ring: {
+          DEFAULT: "var(--ring)",
+          50: "color-mix(in oklch, var(--ring), transparent 50%)"
+        },
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
