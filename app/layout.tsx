@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Gotu as Segoe_UI } from "next/font/google"
+import { Source_Sans_3 as Segoe_UI } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 
